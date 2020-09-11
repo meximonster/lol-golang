@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/meximonster/lol-golang/utils"
+	"github.com/valyala/fastjson"
 )
 
 type summoner struct {
@@ -46,4 +47,22 @@ func AccInfo(name string) string {
 		log.Fatal("Could not unmarshal body", err)
 	}
 	return s.AccountID
+}
+
+// GetMatches returns a list with the gameIds of a player for a specific champion
+func GetMatches(id string, c string) []int64 {
+	m := []int64{}
+	params := "?champion=" + c + "&season=13"
+	url := "https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/" + id + params
+	body := utils.GetReq(url)
+	var p fastjson.Parser
+	v, err := p.ParseBytes(body)
+	if err != nil {
+		log.Fatal("Could not parse body", err)
+	}
+	vv := v.GetArray("matches")
+	for i := range vv {
+		m = append(m, vv[i].GetInt64("gameId"))
+	}
+	return m
 }
