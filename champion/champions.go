@@ -1,5 +1,7 @@
 package champion
 
+import "strconv"
+
 var m = map[string]string{
 	"Annie":        "1",
 	"Olaf":         "2",
@@ -153,10 +155,11 @@ var m = map[string]string{
 }
 
 // GetChamp returns the string value of a champion
-func GetChamp(id string) string {
+func GetChamp(id string) int {
 	v, ok := m[id]
 	if ok {
-		return v
+		i, _ := strconv.Atoi(v)
+		return i
 	}
-	return "err"
+	return 0
 }
