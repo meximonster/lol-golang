@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -13,8 +14,6 @@ func main() {
 	acc := player.GetaccID(os.Args[1])
 	champion := champion.GetChamp(os.Args[2])
 	m := player.GetMatches(acc, strconv.Itoa(champion))
-	// for i := range m {
-	// 	fmt.Println(m[i])
-	// }
+	fmt.Println(m[0])
 	match.Info(m[0], champion)
 }
