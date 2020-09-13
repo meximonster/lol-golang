@@ -24,21 +24,21 @@ func main() {
 	champion := champion.GetChamp(os.Args[2])
 	m := player.GetMatches(acc, strconv.Itoa(champion))
 	fmt.Println("Found", len(m), "matches")
-	resultsChan := make(chan match.Stats)
+	statsChan := make(chan match.PlayerStats)
 	wg := sync.WaitGroup{}
 	go func() {
-		for res := range resultsChan {
-			fmt.Println(res.Kills, res.Deaths, res.Assists)
+		for s := range statsChan {
+			fmt.Println("K/D/A:", s.Stats.Kills, "/", s.Stats.Deaths, "/", s.Stats.Assists)
+			fmt.Println(s.Timeline.CsDiffPerMinDeltas.Zero10, s.Timeline.DamageTakenDiffPerMinDeltas.Zero10, s.Timeline.XpDiffPerMinDeltas.Zero10)
 		}
 	}()
 	for i := range m {
 		wg.Add(1)
 		go func(index int) {
 			defer wg.Done()
-			match.Info(m[index], champion, resultsChan)
+			match.Info(m[index], champion, statsChan)
 		}(i)
 	}
 	wg.Wait()
-	close(resultsChan)
-
+	close(statsChan)
 }
