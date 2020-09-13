@@ -10,7 +10,7 @@ import (
 func GetReq(endpoint string) []byte {
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", endpoint, nil)
-	req.Header.Set("X-Riot-Token", "RGAPI-751a12c2-39f9-464e-a489-c6a58ee2c0f3")
+	req.Header.Set("X-Riot-Token", "RGAPI-12062003-e87e-4bba-a062-75e6ac3371bf")
 	res, err := client.Do(req)
 	if err != nil {
 		log.Fatal("Could not execute request", err)

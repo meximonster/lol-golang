@@ -74,32 +74,53 @@ type stats struct {
 type timeline struct {
 	ParticipantID      int `json:"participantId"`
 	CreepsPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"creepsPerMinDeltas"`
 	XpPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"xpPerMinDeltas"`
 	GoldPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"goldPerMinDeltas"`
 	CsDiffPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"csDiffPerMinDeltas"`
 	XpDiffPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"xpDiffPerMinDeltas"`
 	DamageTakenPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"damageTakenPerMinDeltas"`
 	DamageTakenDiffPerMinDeltas struct {
-		Ten20  float64 `json:"10-20"`
-		Zero10 float64 `json:"0-10"`
+		TenEnd    float64 `json:"10-end,omitempty"`
+		ThirtyEnd float64 `json:"30-end,omitempty"`
+		Twenty30  float64 `json:"20-30,omitempty"`
+		Ten20     float64 `json:"10-20"`
+		Zero10    float64 `json:"0-10"`
 	} `json:"damageTakenDiffPerMinDeltas"`
 }
 
@@ -127,7 +148,7 @@ func Info(id int64, champion int) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println(s.Kills, s.Deaths, s.Assists, t.CsDiffPerMinDeltas.Zero10, t.GoldPerMinDeltas.Zero10)
+			fmt.Println(s.Kills, s.Deaths, s.Assists, t.CsDiffPerMinDeltas.Zero10, t.GoldPerMinDeltas.Zero10, t.XpDiffPerMinDeltas.ThirtyEnd)
 		}
 	}
 }
