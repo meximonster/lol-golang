@@ -28,8 +28,17 @@ func main() {
 	wg := sync.WaitGroup{}
 	go func() {
 		for s := range statsChan {
+			if s.Timeline.Role != "NONE" {
+				fmt.Println("Role:", s.Timeline.Role)
+			}
+			if s.Timeline.Lane != "NONE" {
+				fmt.Println("Lane:", s.Timeline.Lane)
+			}
 			fmt.Println("K/D/A:", s.Stats.Kills, "/", s.Stats.Deaths, "/", s.Stats.Assists)
-			fmt.Println(s.Timeline.CsDiffPerMinDeltas.Zero10, s.Timeline.DamageTakenDiffPerMinDeltas.Zero10, s.Timeline.XpDiffPerMinDeltas.Zero10)
+			fmt.Println("CS difference per min (0-10):", s.Timeline.CsDiffPerMinDeltas.Zero10, "(10-20):", s.Timeline.CsDiffPerMinDeltas.One020, "(20-30):", s.Timeline.CsDiffPerMinDeltas.Two030)
+			fmt.Println("Creeps per min (0-10):", s.Timeline.CreepsPerMinDeltas.Zero10, "(10-20):", s.Timeline.CreepsPerMinDeltas.One020, "(20-30):", s.Timeline.CreepsPerMinDeltas.Two030)
+			fmt.Println("Gold per min (0-10):", s.Timeline.GoldPerMinDeltas.Zero10, "(10-20):", s.Timeline.GoldPerMinDeltas.One020, "(10-20):", s.Timeline.GoldPerMinDeltas.Two030)
+			fmt.Print("\n\n")
 		}
 	}()
 	for i := range m {
