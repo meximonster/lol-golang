@@ -10,9 +10,9 @@ import (
 )
 
 // Info returns player stats from a match given matchId
-func Info(id int64, champion int) {
-	var s stats
-	var t timeline
+func Info(id int64, champion int, resultsChan chan (Stats)) {
+	var s Stats
+	var t Timeline
 	url := "https://euw1.api.riotgames.com/lol/match/v4/matches/" + fmt.Sprint(id)
 	body := utils.GetReq(url)
 	var p fastjson.Parser
@@ -33,7 +33,8 @@ func Info(id int64, champion int) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println(s.Kills, s.Deaths, s.Assists, t.CsDiffPerMinDeltas.Zero10, t.GoldPerMinDeltas.Zero10, t.XpDiffPerMinDeltas.ThirtyEnd)
+			// fmt.Println(s.Kills, s.Deaths, s.Assists)
+			resultsChan <- s
 		}
 	}
 }

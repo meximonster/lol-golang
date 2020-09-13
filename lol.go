@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"sync"
 
 	"github.com/meximonster/lol-golang/champion"
 	"github.com/meximonster/lol-golang/match"
@@ -22,6 +23,22 @@ func main() {
 	acc := player.GetaccID(os.Args[1])
 	champion := champion.GetChamp(os.Args[2])
 	m := player.GetMatches(acc, strconv.Itoa(champion))
-	fmt.Println(m[0])
-	match.Info(m[0], champion)
+	fmt.Println("Found", len(m), "matches")
+	resultsChan := make(chan match.Stats)
+	wg := sync.WaitGroup{}
+	go func() {
+		for res := range resultsChan {
+			fmt.Println(res.Kills, res.Deaths, res.Assists)
+		}
+	}()
+	for i := range m {
+		wg.Add(1)
+		go func(index int) {
+			defer wg.Done()
+			match.Info(m[index], champion, resultsChan)
+		}(i)
+	}
+	wg.Wait()
+	close(resultsChan)
+
 }

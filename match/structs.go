@@ -1,6 +1,7 @@
 package match
 
-type stats struct {
+// Stats - basic player stats
+type Stats struct {
 	ParticipantID                   int  `json:"participantId"`
 	Win                             bool `json:"win"`
 	Item0                           int  `json:"item0"`
@@ -62,7 +63,8 @@ type stats struct {
 	FirstTowerAssist                bool `json:"firstTowerAssist"`
 }
 
-type timeline struct {
+// Timeline stats
+type Timeline struct {
 	ParticipantID      int `json:"participantId"`
 	CreepsPerMinDeltas struct {
 		TenEnd    float64 `json:"10-end,omitempty"`
