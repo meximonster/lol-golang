@@ -78,11 +78,11 @@ type timeline struct {
 		Zero10 float64 `json:"0-10"`
 	} `json:"creepsPerMinDeltas"`
 	XpPerMinDeltas struct {
-		Ten20  int     `json:"10-20"`
+		Ten20  float64 `json:"10-20"`
 		Zero10 float64 `json:"0-10"`
 	} `json:"xpPerMinDeltas"`
 	GoldPerMinDeltas struct {
-		Ten20  int     `json:"10-20"`
+		Ten20  float64 `json:"10-20"`
 		Zero10 float64 `json:"0-10"`
 	} `json:"goldPerMinDeltas"`
 	CsDiffPerMinDeltas struct {
@@ -112,7 +112,7 @@ func Info(id int64, champion int) {
 	var p fastjson.Parser
 	v, err := p.ParseBytes(body)
 	if err != nil {
-		log.Fatal("Could not parse body", err)
+		log.Fatal(err)
 	}
 	vv := v.GetArray("participants")
 	for i := range vv {
@@ -125,7 +125,7 @@ func Info(id int64, champion int) {
 			l2 := vv[i].Get("timeline").MarshalTo(nil)
 			err = json.Unmarshal(l2, &t)
 			if err != nil {
-				log.Fatal("Could not unmarshal json", err)
+				log.Fatal(err)
 			}
 			fmt.Println(s.Kills, s.Deaths, s.Assists, t.CsDiffPerMinDeltas.Zero10, t.GoldPerMinDeltas.Zero10)
 		}
