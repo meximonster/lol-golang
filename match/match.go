@@ -9,7 +9,7 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-// Info returns player stats from a match given matchId
+// Info adds match stats to given channel
 func Info(id int64, champion int, resultsChan chan (PlayerStats)) {
 	var s PlayerStats
 	url := "https://euw1.api.riotgames.com/lol/match/v4/matches/" + fmt.Sprint(id)

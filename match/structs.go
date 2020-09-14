@@ -1,5 +1,6 @@
 package match
 
+// PlayerStats - all stats available from riot api
 type PlayerStats struct {
 	Stats struct {
 		ParticipantID                   int  `json:"participantId"`

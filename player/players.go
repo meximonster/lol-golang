@@ -2,6 +2,7 @@ package player
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/meximonster/lol-golang/utils"
@@ -64,5 +65,6 @@ func GetMatches(id string, c string) []int64 {
 	for i := range vv {
 		m = append(m, vv[i].GetInt64("gameId"))
 	}
+	fmt.Println("Found", len(m), "matches")
 	return m
 }
