@@ -2,9 +2,7 @@ package processdata
 
 import (
 	"fmt"
-	"sync"
-
-	"github.com/meximonster/lol-golang/match"
+	"lol-golang/match"
 )
 
 // GatheredStats are the unified stats
@@ -21,12 +19,11 @@ type GatheredStats struct {
 }
 
 // Print prints the data
-func Print(ch chan match.PlayerStats, n int, wg *sync.WaitGroup) {
-	wg.Add(1)
-	defer wg.Done()
+func Print(ch chan match.PlayerStats, n int) {
 	var kills, deaths, assists, damageToChampions, goldEarned, visionScore, minionsKilled, fbCounter, fbAssistCounter int
 	var firstblood, firstbloodAssist bool
 	for s := range ch {
+		fmt.Println("reading from channel")
 		kills += s.Stats.Kills
 		deaths += s.Stats.Deaths
 		assists += s.Stats.Assists
@@ -71,14 +68,14 @@ func printHelper(s GatheredStats, n int) {
 	fmt.Println("Total first blood assists:", s.fbAssistCounter, "First blood assist ratio:", (s.fbAssistCounter/n)*100, "%")
 }
 
-// Matches calls match.Info which adds stats to channel
-func Matches(m []int64, i int, champion int, ch chan (match.PlayerStats), wg *sync.WaitGroup) {
-	defer wg.Done()
-	match.Info(m[i], champion, ch)
-}
-
-// Wait blocks and will eventually close the channel
-func Wait(ch chan match.PlayerStats, wg *sync.WaitGroup) {
-	wg.Wait()
-	close(ch)
-}
+//// Matches calls match.Info which adds stats to channel
+//func Matches(m []int64, i int, champion int, ch chan match.PlayerStats, wg *sync.WaitGroup) {
+//	defer wg.Done()
+//	match.Info(m[i], champion, ch)
+//}
+//
+//// Wait blocks and will eventually close the channel
+//func Wait(ch chan match.PlayerStats, wg *sync.WaitGroup) {
+//	wg.Wait()
+//	//close(ch)
+//}

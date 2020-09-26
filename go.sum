@@ -1,0 +1,4 @@
+github.com/meximonster/lol-golang v0.0.0-20200926112430-4d7a6e01483e h1:zZLRO/GU2sHfsSpdz/3DYQUi8N4zRejqzoIXm8Pv5gI=
+github.com/meximonster/lol-golang v0.0.0-20200926112430-4d7a6e01483e/go.mod h1:erE9PLT5irJr6CXCn+bXGeVn4FljFizKVzHBT3D9VkQ=
+github.com/valyala/fastjson v1.6.1 h1:qJs/Kz/HebWzk8LmhOrSm7kdOyJBr1XB+zSkYtEEfQE=
+github.com/valyala/fastjson v1.6.1/go.mod h1:CLCAqky6SMuOcxStkYQvblddUtoRxhYMGLrsQns1aXY=

@@ -2,15 +2,13 @@ package main
 
 import (
 	"fmt"
+	"lol-golang/champion"
+	"lol-golang/match"
+	"lol-golang/player"
+	processdata "lol-golang/process"
 	"os"
 	"strconv"
 	"sync"
-	"time"
-
-	"github.com/meximonster/lol-golang/champion"
-	"github.com/meximonster/lol-golang/match"
-	"github.com/meximonster/lol-golang/player"
-	processdata "github.com/meximonster/lol-golang/process"
 )
 
 func init() {
@@ -25,15 +23,26 @@ func main() {
 	acc := player.GetaccID(os.Args[1])
 	champion := champion.GetChamp(os.Args[2])
 	m := player.GetMatches(acc, strconv.Itoa(champion))
-	ch := make(chan match.PlayerStats)
-	wg := &sync.WaitGroup{}
-	wg.Add(len(m))
-	go processdata.Wait(ch, wg)
-	go processdata.Print(ch, len(m), wg)
-	for i := range m {
-		if i%19 == 0 {
-			time.Sleep(1 * time.Second)
+	matchIds := make(chan int64)
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for _, id := range m {
+			matchIds <- id
 		}
-		go processdata.Matches(m, i, champion, ch, wg)
-	}
+		close(matchIds)
+	}()
+	results := make(chan match.PlayerStats)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		match.Info(champion, matchIds, results)
+	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		processdata.Print(results, len(m))
+	}()
+	wg.Wait()
 }

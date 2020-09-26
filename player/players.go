@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/meximonster/lol-golang/utils"
 	"github.com/valyala/fastjson"
+	"lol-golang/utils"
 )
 
 type summoner struct {
@@ -52,7 +52,7 @@ func AccInfo(name string) string {
 
 // GetMatches returns a list with the gameIds of a player for a specific champion
 func GetMatches(id string, c string) []int64 {
-	m := []int64{}
+	var m []int64
 	params := "?champion=" + c + "&season=13"
 	url := "https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/" + id + params
 	body := utils.GetReq(url)
