@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/meximonster/lol-golang/champion"
 	"github.com/meximonster/lol-golang/match"
@@ -26,10 +27,15 @@ func main() {
 	m := player.GetMatches(acc, strconv.Itoa(champion))
 	statsChan := make(chan match.PlayerStats)
 	wg := &sync.WaitGroup{}
-	go processdata.Print(statsChan)
+	go processdata.Print(statsChan, wg)
 	for i := range m {
+		if i%19 == 0 {
+			time.Sleep(1 * time.Second)
+		}
 		wg.Add(1)
-		go processdata.Matches(m, i, wg, champion, statsChan)
+		go processdata.Matches(m, i, champion, statsChan)
+
 	}
 	wg.Wait()
+	close(statsChan)
 }
