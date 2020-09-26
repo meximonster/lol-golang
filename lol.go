@@ -27,13 +27,13 @@ func main() {
 	m := player.GetMatches(acc, strconv.Itoa(champion))
 	ch := make(chan match.PlayerStats)
 	wg := &sync.WaitGroup{}
+	wg.Add(len(m))
 	go processdata.Wait(ch, wg)
 	go processdata.Print(ch, len(m), wg)
 	for i := range m {
 		if i%19 == 0 {
 			time.Sleep(1 * time.Second)
 		}
-		wg.Add(1)
 		go processdata.Matches(m, i, champion, ch, wg)
 	}
 }
