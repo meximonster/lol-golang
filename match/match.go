@@ -33,5 +33,4 @@ func Info(champion int, ids chan int64, results chan PlayerStats) {
 			}
 		}
 	}
-	close(results)
 }
