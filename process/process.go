@@ -7,32 +7,78 @@ import (
 	"github.com/meximonster/lol-golang/match"
 )
 
-// Print prints the data
-func Print(ch chan match.PlayerStats, wg *sync.WaitGroup) {
-	c := 1
-	for s := range ch {
-		printHelper(s, c)
-		c++
-		wg.Done()
-	}
+// GatheredStats are the unified stats
+type GatheredStats struct {
+	kills             int
+	deaths            int
+	assists           int
+	damageToChampions int
+	goldEarned        int
+	visionScore       int
+	minionsKilled     int
+	fbCounter         int
+	fbAssistCounter   int
 }
 
-func printHelper(s match.PlayerStats, c int) {
-	fmt.Println(c)
-	if s.Timeline.Role != "NONE" {
-		fmt.Println("Role:", s.Timeline.Role)
+// Print prints the data
+func Print(ch chan match.PlayerStats, n int, wg *sync.WaitGroup) {
+	wg.Add(1)
+	defer wg.Done()
+	var kills, deaths, assists, damageToChampions, goldEarned, visionScore, minionsKilled, fbCounter, fbAssistCounter int
+	var firstblood, firstbloodAssist bool
+	for s := range ch {
+		kills += s.Stats.Kills
+		deaths += s.Stats.Deaths
+		assists += s.Stats.Assists
+		damageToChampions += s.Stats.TotalDamageDealtToChampions
+		goldEarned += s.Stats.GoldEarned
+		visionScore += s.Stats.VisionScore
+		minionsKilled += s.Stats.TotalMinionsKilled
+		if firstblood {
+			fbCounter++
+		}
+		if firstbloodAssist {
+			fbAssistCounter++
+		}
 	}
-	if s.Timeline.Lane != "NONE" {
-		fmt.Println("Lane:", s.Timeline.Lane)
+	finalStats := GatheredStats{
+		kills, deaths, assists, damageToChampions, goldEarned, visionScore, minionsKilled, fbCounter, fbAssistCounter,
 	}
-	fmt.Println("K/D/A:", s.Stats.Kills, "/", s.Stats.Deaths, "/", s.Stats.Assists)
-	//fmt.Println("CS difference per min (0-10):", s.Timeline.CsDiffPerMinDeltas.Zero10, "(10-20):", s.Timeline.CsDiffPerMinDeltas.One020, "(20-30):", s.Timeline.CsDiffPerMinDeltas.Two030)
-	//fmt.Println("Creeps per min (0-10):", s.Timeline.CreepsPerMinDeltas.Zero10, "(10-20):", s.Timeline.CreepsPerMinDeltas.One020, "(20-30):", s.Timeline.CreepsPerMinDeltas.Two030)
-	//fmt.Println("Gold per min (0-10):", s.Timeline.GoldPerMinDeltas.Zero10, "(10-20):", s.Timeline.GoldPerMinDeltas.One020, "(20-30):", s.Timeline.GoldPerMinDeltas.Two030)
-	fmt.Println("")
+	printHelper(finalStats, n)
+}
+
+// PrintHelper helps
+func printHelper(s GatheredStats, n int) {
+	// if s.Timeline.Role != "NONE" {
+	// 	fmt.Println("Role:", s.Timeline.Role)
+	// }
+	// if s.Timeline.Lane != "NONE" {
+	// 	fmt.Println("Lane:", s.Timeline.Lane)
+	// }
+	fmt.Println("Average KDA:", s.kills/n, "/", s.deaths/n, "/", s.assists/n)
+	fmt.Println("KILLS")
+	fmt.Println("Total:", s.kills, "Average:", s.kills/n)
+	fmt.Println("DEATHS")
+	fmt.Println("Total:", s.deaths, "Average:", s.deaths/n)
+	fmt.Println("ASSISTS")
+	fmt.Println("Total:", s.assists, "Average:", s.assists/n)
+	fmt.Println("----------------")
+	fmt.Println("Total damage to champions:", s.damageToChampions, "Average:", s.damageToChampions/n)
+	fmt.Println("Total minions killed:", s.minionsKilled, "Average:", s.minionsKilled/n)
+	fmt.Println("Total gold earned:", s.goldEarned, "Average:", s.goldEarned/n)
+	fmt.Println("Total vision score:", s.visionScore, "Average:", s.visionScore/n)
+	fmt.Println("Total first bloods:", s.fbCounter, "First blood ratio:", (s.fbCounter/n)*100, "%")
+	fmt.Println("Total first blood assists:", s.fbAssistCounter, "First blood assist ratio:", (s.fbAssistCounter/n)*100, "%")
 }
 
 // Matches calls match.Info which adds stats to channel
-func Matches(m []int64, i int, champion int, ch chan (match.PlayerStats)) {
+func Matches(m []int64, i int, champion int, ch chan (match.PlayerStats), wg *sync.WaitGroup) {
+	defer wg.Done()
 	match.Info(m[i], champion, ch)
+}
+
+// Wait blocks and will eventually close the channel
+func Wait(ch chan match.PlayerStats, wg *sync.WaitGroup) {
+	wg.Wait()
+	close(ch)
 }

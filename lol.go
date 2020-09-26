@@ -25,17 +25,15 @@ func main() {
 	acc := player.GetaccID(os.Args[1])
 	champion := champion.GetChamp(os.Args[2])
 	m := player.GetMatches(acc, strconv.Itoa(champion))
-	statsChan := make(chan match.PlayerStats)
+	ch := make(chan match.PlayerStats)
 	wg := &sync.WaitGroup{}
-	go processdata.Print(statsChan, wg)
+	go processdata.Wait(ch, wg)
+	go processdata.Print(ch, len(m), wg)
 	for i := range m {
 		if i%19 == 0 {
 			time.Sleep(1 * time.Second)
 		}
 		wg.Add(1)
-		go processdata.Matches(m, i, champion, statsChan)
-
+		go processdata.Matches(m, i, champion, ch, wg)
 	}
-	wg.Wait()
-	close(statsChan)
 }
