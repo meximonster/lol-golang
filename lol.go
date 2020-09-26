@@ -38,7 +38,7 @@ func main() {
 	results := make(chan match.PlayerStats)
 	wg := sync.WaitGroup{}
 	wg2 := sync.WaitGroup{}
-	for i := 0; i<numWorkers; i++ {
+	for i := 0; i < numWorkers; i++ {
 		wg.Add(1)
 		wg2.Add(1)
 		go func() {
@@ -55,6 +55,6 @@ func main() {
 	wg2.Wait()
 	close(results)
 	wg.Wait()
-
-	fmt.Println("finished in", time.Since(start))
+	fmt.Println("----------------")
+	fmt.Println("Finished in", time.Since(start))
 }

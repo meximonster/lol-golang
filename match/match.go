@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/valyala/fastjson"
 	"lol-golang/utils"
+
+	"github.com/valyala/fastjson"
 )
 
 // Info adds match stats to given channel
@@ -28,7 +29,7 @@ func Info(champion int, ids chan int64, results chan PlayerStats) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Println("writing to channel", id)
+				//fmt.Println("writing to channel", id)
 				results <- s
 			}
 		}
