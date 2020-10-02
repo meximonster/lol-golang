@@ -57,15 +57,3 @@ func printHelper(s GatheredStats, n int) {
 	fmt.Println("Total vision score:", s.visionScore, "Average:", s.visionScore/n)
 	fmt.Println("Total first bloods:", s.fbCounter, "First blood ratio:", math.Round((float64(s.fbCounter)/float64(n))*100), "%")
 }
-
-//// Matches calls match.Info which adds stats to channel
-//func Matches(m []int64, i int, champion int, ch chan match.PlayerStats, wg *sync.WaitGroup) {
-//	defer wg.Done()
-//	match.Info(m[i], champion, ch)
-//}
-//
-//// Wait blocks and will eventually close the channel
-//func Wait(ch chan match.PlayerStats, wg *sync.WaitGroup) {
-//	wg.Wait()
-//	//close(ch)
-//}

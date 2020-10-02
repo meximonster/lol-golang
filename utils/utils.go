@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -20,6 +21,9 @@ func GetReq(endpoint string) []byte {
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Fatal("Could not read body from response", err)
+	}
+	if res.StatusCode == 429 {
+		fmt.Println("Rate limit exceeded for", req.URL)
 	}
 	return body
 }
